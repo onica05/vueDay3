@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程案例-计算总价</title>
+    <style>
+        h1{
+            margin-left: 700px;
+
+        }
+        ul {
+            display: inline-block;
+            width: 1200px;
+            margin: 0px 152px;
+            padding: 0px;
+        }
+        li{
+            width: 100%;
+            border: 1px solid red;
+            cursor: pointer;
+
+        }
+        .active{
+            background-color: red;
+            border-color: blueviolet;
+        }
+       
+        span:first-child{
+            float: left;
+        }
+        span:last-child{
+            float: right;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <h1>总价{{total}}</h1>
+        <ul>
+            <!-- 做点击事件，要把Index作为参数传递给函数，不然函数调用一直取不到Index -->
+        <!-- 用class添加类名的写法： <div v-bind:class="{active: isActive}"></div>  对象形式 -->
+            <li :key="item.id" v-for="(item, index) in lists" @click="handle(index)" :class="{active:item.isActive}">
+                <span>{{item.fruit}}</span>
+                <span>￥{{item.price}}</span>
+            </li>
+            
+        </ul>
+    </div>
+
+     <!-- 引入vue.js库文件 -->
+     <script type="text/javascript" src="../JS/vue.min.js"></script>
+     <script type="text/javascript">
+        // 使用原生js遍历对象
+        // var obj = {
+        //     uname:'list',
+        //     age:12,
+        //     gender:'female'
+        // }
+        // for(var key in obj){
+        //     // 这里面的key表示，属性； obj[key]表示属性值 ，看这个理解怎么获取属性与属性值！！！！
+        //     console.log(key, obj[key]);
+        // }
+
+
+         var vm = new Vue({
+             el: '#app', 
+             data: {
+                lists:[{
+                    id:1,
+                    fruit:'苹果',
+                    price:15,
+                    isActive:false,
+                },{
+                    id:2,
+                    fruit:'梨子',
+                    price:10,
+                    isActive:false,
+                },{
+                    id:3,
+                    fruit:'樱桃',
+                    price:22,
+                    isActive:false,
+
+                },{
+                    id:4,
+                    fruit:'西瓜',
+                    price:13,
+                    isActive:false,
+
+                },],
+                total:0,
+             },
+             methods: {
+                 handle: function(index){
+                     console.log(this.lists);
+                    //  这一步是关键，怎么获取对象的属性，属性值
+                    // 对象是以键值对的形式存在
+                     console.log(this.lists[index].fruit);
+
+
+                    // //  计算总价公式，这样写存在一个bug，就是当点击完毕4个水果之后再次点击任意一个水果，这个总结并没有减，而是继续加点击的这个水果
+                    // // 所以，需要条件判断，通过背景色的变化（没有active这个类名），而做相应的加减法操作
+                    //  this.total += this.lists[index].price
+                    // //  更改背景色，添加类名acitve。当点击这个Li的时候，就给该li添加类名
+                    // this.lists[index].isActive =! this.lists[index].isActive
+
+                    // 完整版 正确操作
+                    if(this.lists[index].isActive == true){
+                        this.lists[index].isActive =! this.lists[index].isActive
+                        this.total -= this.lists[index].price
+                    }else{
+                        this.lists[index].isActive =! this.lists[index].isActive
+                        this.total += this.lists[index].price
+                    }
+
+
+                 }
+             }
+         });
+     </script>
+</body>
+</html>

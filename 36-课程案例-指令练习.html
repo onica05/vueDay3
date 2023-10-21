@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程案例-指令练习</title>
+    <style>
+        #app {
+            width: 308px;
+            margin: 20px auto;
+        }
+
+        .text {
+            width: 300px;
+            height: 40px;
+        }
+
+        .text input {
+            width: inherit;
+            height: inherit;
+            padding-left: 5px;
+            border-radius: 5px;
+            border: 1px solid grey;
+            box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, .1);
+        }
+
+        ul {
+            width: 300px;
+            padding: 0px;
+            list-style: none;
+        }
+
+        li {
+            width: inherit;
+            height: 30px;
+            border-bottom: 1px solid greenyellow;
+        }
+
+        /* 点击checkbox之后的文字效果 */
+        .del {
+            color: gray;
+            /* 文字中划线 */
+            text-decoration: line-through;
+        }
+
+        /* 所有的Li 一开始是隐藏，只有当input点击空格之后下面li就显示  */
+        .show {
+            display: none;
+        }
+
+        .delete {
+            background-color: red;
+            color: white;
+            border: none;
+            width: 49px;
+            height: 26px;
+            border-radius: 3px;
+            float: right;
+        }
+
+        .empty {
+            font-size: 13px;
+            color: #000;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 需求：在输入框输入内容，按回车键，添加到下面且带有删除按钮且有checkbox，文字内容变成灰色中划线，新添加的内容补充在最下面 【下面的内容就像TodoList】-->
+    <div id="app">
+        <div class="text">
+            <input type="text" v-model="items.content" placeholder="请输入想做的内容..." v-on:keyup.enter="handleSubmint">
+        </div>
+        <ul>
+            <li :class="{del:isDelete, show:isShow}" v-for="(content,index) in listTrian" :key="index">
+                <!-- checkbox里面的内容也是需要双向绑定 -->
+                <input type="checkbox" id="" @click="checkbox">
+                <label >list_{{index}}_{{content}}</label>
+                <button class="delete" @click="deleteLi">删除</button>
+            </li>
+
+            <li :class="{del:isDelete, show:isShow}" v-for="(item,index) in list2" :key="index">
+                <!-- checkbox里面的内容也是需要双向绑定 -->
+                <input type="checkbox" id="" @click="checkbox">
+                <label >list2{{item.content}}</label>
+                <label >list2.content2{{item.content2}}</label>
+
+                <button class="delete" @click="deleteLi">删除</button>
+            </li>
+            
+        </ul>
+        <p class='empty' v-if='listTrian.length===0'>暂无内容</p>
+
+    </div>
+
+    <!-- 引入vue.js库文件 -->
+    <script type="text/javascript" src="../JS/vue.min.js"></script>
+    <script type="text/javascript">
+
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                //默认数据
+                items: {
+                    content: '', //初始化内容为空，不能省略
+                    finished: false, //未完成
+                    deleted: false, //未删除
+                },
+                listTrian: [],
+                list2: [],
+                isDelete: false,
+                isShow: true,
+            },
+            methods: {
+                handleSubmint: function () {
+                    console.log(this);
+                    this.isShow = false;
+                    console.log('this.items.content---'+ this.items.content);
+                    console.log('this.items---'+ this.items);
+
+                    // 这里面装的就是content属性  属性是对象自带的特性（属性）；对象可以有多个属性（独一无二的）
+                    this.listTrian.push(this.items.content);   
+                    // 这里面装的是items对象，结合上面list2 label中的{{item.content}}找到更加详细的content
+                    this.list2.push(this.items);
+
+
+
+                    // 关注这两个输出的内容
+                    console.log(this.listTrian);
+                    console.log(this.list2);
+                    //以上是为了区分items listtrian list2 
+
+
+                    
+                    //重置 items
+                    this.items = {
+                        content: '', //初始化内容为空，不能省略
+                        
+                    }
+                },
+                checkbox: function () {
+                    this.isDelete = !this.isDelete
+                },
+                deleteLi: function () {
+                    this.isShow = !this.isShow
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
